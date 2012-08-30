@@ -1,0 +1,41 @@
+table#fine_missingLabel th.language_title {
+	width: 30px;
+}
+
+table#fine_missingLabel td.language {
+	text-align: center;
+}
+
+/****** missingLabel Page *******/
+div#missingLabelPage form#searchLabel,
+div#missingLabelPage form#searchLabel input.submit {
+	float: right;
+}
+
+div#missingLabelPage form#editLabel,
+div#missingLabelPage form#searchLabel select.language {
+	float: left;
+}
+
+div#missingLabelPage div#exportExcel {
+	clear: both;
+}
+
+
+
+/****** searchLabel Page *******/
+div#searchLabelPage table#fin_searchlabel {
+	clear: both;
+	width: 100%;
+}
+div#searchLabelPage table#fin_searchlabel th {
+	background-color: #CCCCCC;
+}
+
+div#searchLabelPage form#searchlabel {
+	float: right;
+}
+
+div#searchLabelPage select#searchLanguage {
+	float: left;
+}

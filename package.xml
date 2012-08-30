@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+	<displayName>Fine</displayName>
+	<shortDescription>Fine is an internationalisation package. It will help you provide applications that
+	support several languages. FINE means: Fine is not english :). Translation is performed using PHP
+	mapping files, but you will have a nice graphical interface in the Mouf framework to write your own
+	translated messages.</shortDescription>
+	<docUrl>http://www.thecodingmachine.com/ext/mouf/doc/i18n/using_fine.html</docUrl>
+	<doc>
+		<page title="Using FINE" url="using_fine.html" />
+		<page title="Date functions" url="date_functions.html" />
+		<page title="Currency functions" url="currency_functions.html" />
+	</doc>	
+	<logo>logo.png</logo>
+	<dependencies>
+		<dependency>
+			<group>utils/common</group>
+			<name>getvars</name>
+			<version>>=1.0</version>
+		</dependency>
+		<dependency>
+			<group>utils/export</group>
+			<name>phpexcel</name>
+			<version>>=1.7.5</version>
+		</dependency>
+		<dependency>
+			<group>utils/icons</group>
+			<name>famfamfam</name>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<group>javascript/jquery</group>
+			<name>jquery-fixedheadertable</name>
+			<version>1.3</version>
+		</dependency>
+	</dependencies>
+	<requires>
+		<require>FineMessageLanguage.php</require>
+		<require>language/LanguageDetectionInterface.php</require>
+		<require>language/BrowserLanguageDetection.php</require>
+		<require>language/DomainLanguageDetection.php</require>
+		<require>language/FixedLanguageDetection.php</require>
+		<require>language/CascadingLanguageDetection.php</require>
+		<require>translate/LanguageTranslationInterface.php</require>
+		<require>translate/FinePHPArrayTranslationService.php</require>
+		<require>misc/FineCurrencyUtils.php</require>
+		<require>msgFunctions.php</require>
+	</requires>
+	<adminRequires>
+		<require>FineAdmin.php</require>
+		<require>controllers/EditLabelController.php</require>
+		<require>ValidatorDescriptor.php</require>
+		<require>RegisterSearchModule.php</require>		
+	</adminRequires>	
+	<install>
+		<file>install.php</file>
+	</install>
+</package>

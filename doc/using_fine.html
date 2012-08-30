@@ -1,0 +1,114 @@
+<h1>Internationalisation with FINE</h1>
+
+<p>Fine is an internationalisation package. It will help you develop applications that
+support several languages. FINE means: Fine is not English :).</p>
+<p>Translation is performed using PHP mapping files, but you will have a nice graphical interface 
+in the Mouf framework to write your own translated messages.</p>
+
+<p>In this document, we will describe how to use FINE to support several languages in your application.</p>
+
+<h2>Installing Fine</h2>
+
+<p>Fine is a Mouf package. It is part of the "common/i18n" directory. Since it is a Mouf package, it can be easily installed using the Mouf package installer.</p>
+<p>Once you installed Fine, you must create the first instance of a LanguageTranslation named translationService. You can see it in the "Mouf status".</p>
+<img src="images/mouf_status.png" alt="" />
+
+<p>Click on the link to create the new instance of FinePHPArrayTranslationService. The name must be "translationService".</p>
+<p>After it, the FinePHPArrayTranslationService component needs 2 properties:</p>
+
+<ul>
+	<li>i18nMessagePath: folder of the file where the translation is stored;</li>
+	<li>languageDetection: create an instance to detect the language</li>
+</ul>
+<img src="images/mouf_translationService.png" alt="" />
+
+<p>If you use the domaineLanguageDetection, you must add value to the array. There are 2 values:
+	<ul>
+		<li>domain: name domain. Example: www.thecodingmachine.com;</li>
+		<li>value: only code language. Exemple: en</li>
+	</ul>
+</p>
+<img src="images/mouf_domainelanguagedetection.png" alt="" />
+
+<p>In the administration, you should see 3 new menus in the Mouf User Interface:</p>
+<img src="images/fineMenu.jpg" alt="" />
+
+<h2>Using the Fine User Interface</h2>
+<p>Fine uses the "browser" default language to decide in which language the message should be displayed.
+If the language is not available (for instance if the browser language is "Chinese", but if there is no chinese translataion,
+Fine will use the "default" language.</p>
+<p>The "Supported languages" menu will help you add new supported languages:</p>
+<img src="images/supportedLanguages.jpg" alt="" />
+
+<p>By clicking on the "Find Missing Labels" menu, a screen listing all existing labels will be displayed:</p>
+<img src="images/missingLabels.jpg" alt="" />
+
+<p>On this page, the list of all translated labels is shown in a table. There is one column for each language.
+In the sample screenshot, there are 2 supported languages: the default language and French. On this screen,
+we can see that we forgot to provide a valid translation for the label "login.password" in French.</p>
+
+<p>We can use this screen to add new labels too.</p>
+
+<h2>Using Fine in your PHP code</h2>
+<p>Adding new translated messages is very useful, but we still need to be able to display them in the correct language.</p>
+<p>Fine defines 2 useful functions: <em>eMsg</em> or <em>iMsg</em>.</p>
+<p><em>eMsg</em> will display the translated label in the output. For instance:</p>
+<pre>
+// This function will display the "login.password" label in the browser's language.
+eMsg("login.password");
+</pre>
+<p><em>iMsg</em> is similar to <em>eMsg</em> excepts it returns the label instead of displaying it. For instance:</p>
+<pre>
+$passwordLbl = iMsg("login.password");
+</pre>
+
+<h2>Labels with parameters</h2>
+<p>Labels can contain parameters. In this case, parameters will be inserted at runtime, when calling the <em>iMsg</em> or <em>eMsg</em> functions.
+For instance:</p>
+<pre>
+// The label you defined
+form.invalidMail="Error. {0} is not a valid mail."
+
+// How to call the eMsg function. 
+eMsg("form.invalidMail", $mail).
+</pre>
+<p>The <code>{0}</code> label will be dynamically replaced with the "$mail" variable. Of course, you can put {1}, {2}, {3}... in your labels and pass additional parameters to <em>iMsg</em> or <em>eMsg</em> function.</p>
+
+<h2>Dynamically translating your code</h2>
+
+<p>Fine has a very nice feature called "automated message translation". You can enable or disable this mode using the "Enable/Disable translation" menu.</p>
+<img src="images/enableDisableTranslation.jpg" alt="" />
+<p>When this mode is enabled, in your application, all labels will have a trailing "edit" link. By clicking on this link, you will be directed to the "translation" page.</p>
+
+<p>A normal page (translation disabled)</p>
+<img src="images/translationDisabled.jpg" />
+<p>A page with translation enabled</p>
+<img src="images/translationEnabled.jpg" />
+
+<h2>Where are messages stored</h2>
+
+<p>All your translated messages are stored in the /resources directory of your project.</p>
+<p>The translated messages are stored as PHP files. <b>message.php</b> contains the messages for the default language. <b>message_fr.php</b> will contain the
+language translations for French, etc...</p>
+
+<h2>Best practices</h2>
+
+<p>All your application's labels will be stored in the same file. Since an application can contain thousands of labels, 
+it can quickly become a mess.</p>
+<p>In order to keep labels organized, we recommend to organize labels using a "suffix". For instance, all labels
+related to the login screen could start with "login.".</p>
+<p>The login labels would therefore look like this:</p>
+<ul>
+  <li>login.login</li>
+  <li>login.password</li>
+  <li>login.loginbutton</li>
+  <li>login.welcome</li>
+  <li>login.error</li>
+  <li>...</li>
+</ul>
+<p>Only very broad and common labels (like "yes", "no", "cancel"...) should have no prefix.</p>
+
+<h2>Advanced features: translation</h2>
+
+<p>With the FinePHPArrayTranslationService class, you can translate each component separately. You should see 2 new menus in the right. They work like the same link to the left</p>
+<img src="images/mouf_translate.png" alt="" />
