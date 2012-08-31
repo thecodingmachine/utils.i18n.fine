@@ -19,6 +19,9 @@ Tutorial
 
 ###Using the Fine User Interface
 
+In the Mouf administration, you should see 3 new menus in the Mouf User Interface:
+![FINE menu](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/fineMenu.jpg)
+
 Out of the box, Fine uses the "browser" default language to decide in which language the message should be displayed (We will see later how to change this behaviour).
 If the language is not available (for instance if the browser language is "Chinese", but if there is no chinese translataion, Fine will use the "default" language.
 The "Supported languages" menu will help you add new supported languages:
@@ -73,55 +76,37 @@ Internally, FINE deals with 2 kinds of objects:
 - *Translation services* (objects implementing the LanguageTranslationInterface) are objects that can translate a string from one language to another.
 - *Language detectors* (objects implementing the LanguageDetectionInterface) are objects that are in charge of finding what language the user knows.
 
-TODO: continue here!
+When you use the *iMsg* or *eMsg* functions, FINE actually access the *translationService* instance defined in Mouf.
+This instance is the default service used to translate strings (it is an instance of the FinePHPArrayTranslationService class).
+The *translationService* contains the path of the translations. By default, these are stored in "/resources".
+The *translationService* accesses the *defaultLanguageDetection* instance to know what language it should use for the translation.
 
-// TODO: coller ça plus tard!
-The Fine install process will create a number of instances for you:
-- translationService: this is an instance of the FinePHPArrayTranslationService. This instance is the object you will call to get translations.
+Here is the translationService instance:
+![FINE translationService](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/mouf_translationService.png)
 
-For instance:
-```php
+By default, the *defaultLanguageDetection* is a BrowserLanguageDetection class, that analyses the language of the browser.
+You can of course change that. For instance the domainLanguageDetection can be used to define the language based on the domain name of the website.
 
-``` 
+If you use the domaineLanguageDetection, you must add value to the array. There are 2 values:
+- domain: name domain. Example: www.thecodingmachine.com;
+- value: only code language. Exemple: en
 
-<p>Click on the link to create the new instance of FinePHPArrayTranslationService. The name must be "translationService".</p>
-<p>After it, the FinePHPArrayTranslationService component needs 2 properties:</p>
-
-<ul>
-	<li>i18nMessagePath: folder of the file where the translation is stored;</li>
-	<li>languageDetection: create an instance to detect the language</li>
-</ul>
-<img src="images/mouf_translationService.png" alt="" />
-
-<p>If you use the domaineLanguageDetection, you must add value to the array. There are 2 values:
-	<ul>
-		<li>domain: name domain. Example: www.thecodingmachine.com;</li>
-		<li>value: only code language. Exemple: en</li>
-	</ul>
-</p>
-<img src="images/mouf_domainelanguagedetection.png" alt="" />
-
-<p>In the administration, you should see 3 new menus in the Mouf User Interface:</p>
-<img src="images/fineMenu.jpg" alt="" />
+![FINE translationService](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/mouf_domainelanguagedetection.png)
 
 
+Dynamically translating your code
+---------------------------------
 
-<h2>Dynamically translating your code</h2>
+Fine has a very nice feature called "automated message translation". You can enable or disable this mode using the "Enable/Disable translation" menu.
+![FINE enable/disable translation](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/enableDisableTranslation.jpg)
 
-<p>Fine has a very nice feature called "automated message translation". You can enable or disable this mode using the "Enable/Disable translation" menu.</p>
-<img src="images/enableDisableTranslation.jpg" alt="" />
-<p>When this mode is enabled, in your application, all labels will have a trailing "edit" link. By clicking on this link, you will be directed to the "translation" page.</p>
+When this mode is enabled, in your application, all labels will have a trailing "edit" link. By clicking on this link, you will be directed to the "translation" page.
 
-<p>A normal page (translation disabled)</p>
+A normal page (translation disabled)
+![FINE translation disabled](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/translationDisabled.jpg)
 <img src="images/translationDisabled.jpg" />
-<p>A page with translation enabled</p>
-<img src="images/translationEnabled.jpg" />
-
-<h2>Where are messages stored</h2>
-
-<p>All your translated messages are stored in the /resources directory of your project.</p>
-<p>The translated messages are stored as PHP files. <b>message.php</b> contains the messages for the default language. <b>message_fr.php</b> will contain the
-language translations for French, etc...</p>
+A page with translation enabled
+![FINE translation enabled](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/translationEnabled.jpg)
 
 Best practices
 --------------
@@ -140,7 +125,17 @@ The login labels would therefore look like this:
 
 Only very broad and common labels (like "yes", "no", "cancel"...) should have no prefix.
 
-<h2>Advanced features: translation</h2>
+Where are messages stored
+-------------------------
 
-<p>With the FinePHPArrayTranslationService class, you can translate each component separately. You should see 2 new menus in the right. They work like the same link to the left</p>
-<img src="images/mouf_translate.png" alt="" />
+All your translated messages are stored in the /resources directory of your project.
+The translated messages are stored as PHP files. <b>message.php</b> contains the messages for the default language. <b>message_fr.php</b> will contain the
+language translations for French, etc...
+If your translation key contains a dot (for instance login.password), FINE creates a special file containing all "login.*" keys.
+
+Advanced features: translation
+------------------------------
+
+Instead of using *iMsg* and *eMsg* functions, you can use directly the *translationService*. You can create many instances
+of classes implementing the *LanguageTranslationInterface*. If you are developping modules, this is useful to store the
+translations of your module right in your module, without messing with the user's main tranlsation files.
