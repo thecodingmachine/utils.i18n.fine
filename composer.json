@@ -24,7 +24,8 @@
     "autoload": {
         "psr-0": {
             "Mouf": "src/"
-        }
+        },
+        "files": ["src/msgFunctions.php"]
     },
     "mouf": {
     	"install": {

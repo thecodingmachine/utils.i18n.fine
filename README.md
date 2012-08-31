@@ -36,32 +36,34 @@ We can use this screen to add new labels too.
 ###Using Fine in your PHP code
 
 Adding new translated messages is very useful, but we still need to be able to display them in the correct language.
-Fine defines 2 useful functions: <em>eMsg</em> or <em>iMsg</em>.
-<p><em>eMsg</em> will display the translated label in the output. For instance:</p>
-<pre>
+Fine defines 2 useful functions: *eMsg* or *iMsg*.
+*eMsg* will display the translated label in the output. For instance:
+
+```php
 // This function will display the "login.password" label in the browser's language.
 eMsg("login.password");
-</pre>
-<p><em>iMsg</em> is similar to <em>eMsg</em> excepts it returns the label instead of displaying it. For instance:</p>
-<pre>
-$passwordLbl = iMsg("login.password");
-</pre>
+```
 
-<h2>Labels with parameters</h2>
-<p>Labels can contain parameters. In this case, parameters will be inserted at runtime, when calling the <em>iMsg</em> or <em>eMsg</em> functions.
-For instance:</p>
-<pre>
+*iMsg* is similar to *eMsg* excepts it returns the label instead of displaying it. For instance:
+```php
+$passwordLbl = iMsg("login.password");
+```
+
+Labels with parameters
+----------------------
+
+Labels can contain parameters. In this case, parameters will be inserted at runtime, when calling the *iMsg* or *eMsg* functions.
+For instance:
+
+```php
 // The label you defined
 form.invalidMail="Error. {0} is not a valid mail."
 
 // How to call the eMsg function. 
 eMsg("form.invalidMail", $mail).
-</pre>
-<p>The <code>{0}</code> label will be dynamically replaced with the "$mail" variable. Of course, you can put {1}, {2}, {3}... in your labels and pass additional parameters to <em>iMsg</em> or <em>eMsg</em> function.</p>
+```
 
-
-
-
+The <code>{0}</code> label will be dynamically replaced with the "$mail" variable. Of course, you can put {1}, {2}, {3}... in your labels and pass additional parameters to *iMsg* or *eMsg* function.
 
 
 How it works
