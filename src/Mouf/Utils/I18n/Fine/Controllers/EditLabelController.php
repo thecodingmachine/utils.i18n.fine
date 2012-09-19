@@ -49,7 +49,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 			$this->isMessageEditionMode = true;
 		}
 		$this->template->addContentFile(dirname(__FILE__)."/../views/enableDisableEdition.php", $this);
-		$this->template->draw();
+		$this->template->toHtml();
 	}
 
 	/**
@@ -69,7 +69,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 		}
 
 		$this->template->addContentFile(dirname(__FILE__)."/../views/enableDisableEdition.php", $this);
-		$this->template->draw();
+		$this->template->toHtml();
 	}
 
 	/**
@@ -95,7 +95,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 		unset($messagesArray[$language]);
 
 		$this->template->addContentFunction("editLabel", $key, $msg, $language, $messagesArray, false, $backto, $msginstancename, $selfedit, $saved);
-		$this->template->draw();
+		$this->template->toHtml();
 	}
 
 	/**
@@ -129,7 +129,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 		$this->template->addCssFile("plugins/utils/i18n/fine/2.1/views/css/style.css");
 		$this->template->addJsFile(ROOT_URL."plugins/javascript/jquery/jquery-fixedheadertable/1.3/js/jquery-fixedheadertable.min.js");
 		$this->template->addContentFile(dirname(__FILE__)."/../views/missingLabel.php", $this);
-		$this->template->draw();
+		$this->template->toHtml();
 	}
 
 	/**
@@ -147,7 +147,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 		
 		
 		$this->template->addContentFile(dirname(__FILE__)."/../views/supportedLanguages.php", $this);
-		$this->template->draw();
+		$this->template->toHtml();
 	}
 	
 	/**
@@ -195,7 +195,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 
 		$this->template->addCssFile("plugins/utils/i18n/fine/2.1/views/css/style.css");
 		$this->template->addContentFile(dirname(__FILE__)."/../views/searchLabel.php", $this);
-		$this->template->draw();
+		$this->template->toHtml();
 	}
 	
 	/**
@@ -287,7 +287,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 			$this->msgInstanceName = $msginstancename;
 			$this->selfedit = $selfedit;
 			$this->template->addContentFile(dirname(__FILE__)."/../views/excelimport.php", $this);
-			$this->template->draw();
+			$this->template->toHtml();
 		}
 	}
 	
