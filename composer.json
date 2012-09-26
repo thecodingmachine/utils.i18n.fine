@@ -28,14 +28,16 @@
         },
         "files": ["src/msgFunctions.php"]
     },
-    "mouf": {
-    	"install": {
-    		"mouf/install.php":"file"
-    	},
-    	"doc": {
-    		"using_fine.html": "Using FINE",
-    		"date_functions.html": "Date functions",
-    		"currency_functions.html": "Currency functions"
-    	}
-    }
+    "extra": {
+	    "mouf": {
+	    	"install": {
+	    		"mouf/install.php":"file"
+	    	},
+	    	"doc": {
+	    		"using_fine.html": "Using FINE",
+	    		"date_functions.html": "Date functions",
+	    		"currency_functions.html": "Currency functions"
+	    	}
+	    }
+	}
 }
