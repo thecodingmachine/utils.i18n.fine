@@ -16,12 +16,10 @@
  * @param ... string Parameters of variable elements in the translation. These elements are wrote {0} for the first, {1} for the second ...
  * @return string Return the translation
  */
-/**
+/*
  * Avoid function re-declaration
  */
-
-if(function_exists("iMsg")){return;}
-
+if(!function_exists("iMsg")){
 
 function iMsg($key) {
 	static $translationService = null;
@@ -148,4 +146,6 @@ function fine_get_common_service($key) {
 	}
 	
 	return call_user_func_array(array($commonService, "getTranslationNoEditMode"), $args);
+}
+
 }
