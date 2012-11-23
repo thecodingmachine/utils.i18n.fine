@@ -16,6 +16,13 @@
  * @param ... string Parameters of variable elements in the translation. These elements are wrote {0} for the first, {1} for the second ...
  * @return string Return the translation
  */
+/**
+ * Avoid function re-declaration
+ */
+
+if(function_exists("iMsg")){return;}
+
+
 function iMsg($key) {
 	static $translationService = null;
 	if ($translationService == null) {
