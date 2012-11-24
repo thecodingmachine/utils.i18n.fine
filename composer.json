@@ -3,7 +3,7 @@
     "description": "Fine is a PHP internationalisation package. It will help you provide applications that support several languages. FINE means: Fine is not english :). Translation is performed using PHP mapping files, but you will have a nice graphical interface in the Mouf framework to write your own translated messages.",
     "keywords": ["i18n", "internationalisation", "fine", "mouf"],
     "homepage": "https://github.com/thecodingmachine/utils.i18n.fine",
-    "type": "library",
+    "type": "mouf-library",
     "license": "MIT",
     "authors": [
         {
