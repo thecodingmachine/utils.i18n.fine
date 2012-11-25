@@ -30,10 +30,12 @@
     },
     "extra": {
 	    "mouf": {
-	    	"install": {
-	    		"type": "file",
-	    		"file": "mouf/install.php"
-	    	},
+	    	"install": [
+		    	{
+		    		"type": "file",
+		    		"file": "mouf/install.php"
+		    	}
+	    	],
 	    	"doc": {
 	    		"using_fine.html": "Using FINE",
 	    		"date_functions.html": "Date functions",
