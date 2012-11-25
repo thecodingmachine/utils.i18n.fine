@@ -31,7 +31,8 @@
     "extra": {
 	    "mouf": {
 	    	"install": {
-	    		"mouf/install.php":"file"
+	    		"type": "file",
+	    		"file": "mouf/install.php"
 	    	},
 	    	"doc": {
 	    		"using_fine.html": "Using FINE",
