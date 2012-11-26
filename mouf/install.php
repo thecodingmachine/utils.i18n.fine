@@ -1,8 +1,12 @@
 <?php
+use Mouf\MoufManager;
+use Mouf\Actions\InstallUtils;
+
 // First, let's request the install utilities
-require_once '../../../../../mouf/actions/InstallUtils.php';
+
 
 // Let's init Mouf
+
 InstallUtils::init(InstallUtils::$INIT_APP);
 
 // Let's create the instance
