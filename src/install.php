@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__."/../../../autoload.php";
 use Mouf\Actions\InstallUtils;
 use Mouf\MoufManager;
 
@@ -24,7 +25,7 @@ if ($moufManager->instanceExists("defaultLanguageDetection")) {
 if ($moufManager->instanceExists("fineCommonTranslationService")) {
 	$fineCommonTranslationService = $moufManager->getInstanceDescriptor("fineCommonTranslationService");
 } else {
-	$fineCommonTranslationService = $moufManager->createInstance("FinePHPArrayTranslationService");
+	$fineCommonTranslationService = $moufManager->createInstance("Mouf\\Utils\\I18n\\Fine\\Translate\\FinePHPArrayTranslationService");
 	$fineCommonTranslationService->setName("fineCommonTranslationService");
 	$fineCommonTranslationService->getProperty("languageDetection")->setValue($defaultLanguageDetection);
 }
@@ -34,9 +35,9 @@ $fineCommonTranslationService->getProperty("i18nMessagePath")->setValue("vendor/
 if ($moufManager->instanceExists("defaultTranslationService")) {
 	$defaultTranslationService = $moufManager->getInstanceDescriptor("defaultTranslationService");
 } else {
-	$defaultTranslationService = $moufManager->createInstance("FinePHPArrayTranslationService");
+	$defaultTranslationService = $moufManager->createInstance("Mouf\\Utils\\I18n\\Fine\\Translate\\FinePHPArrayTranslationService");
 	$defaultTranslationService->setName("defaultTranslationService");
-	$defaultTranslationService->getProperty("i18nMessagePath")->setValue("resources/");
+	$defaultTranslationService->getProperty("i18nMessagePath")->setValue("vendor/mouf/utils.i18n.fine/resources/");
 	$defaultTranslationService->getProperty("languageDetection")->setValue($defaultLanguageDetection);
 }
 
