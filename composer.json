@@ -28,6 +28,7 @@
         },
         "files": ["src/msgFunctions.php"]
     },
+    "minimum-stability": "dev",
     "extra": {
 	    "mouf": {
 	    	"install": [

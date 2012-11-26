@@ -1,6 +1,6 @@
 <?php
-use Mouf\MoufManager;
 use Mouf\Actions\InstallUtils;
+use Mouf\MoufManager;
 
 // First, let's request the install utilities
 
