@@ -17,7 +17,7 @@ $moufManager = MoufManager::getMoufManager();
 if ($moufManager->instanceExists("defaultLanguageDetection")) {
 	$defaultLanguageDetection = $moufManager->getInstanceDescriptor("defaultLanguageDetection");
 } else {
-	$defaultLanguageDetection = $moufManager->createInstance("BrowserLanguageDetection");
+	$defaultLanguageDetection = $moufManager->createInstance("Mouf\\Utils\\I18n\\Fine\\Language\\BrowserLanguageDetection");
 	$defaultLanguageDetection->setName("defaultLanguageDetection");
 }
 
