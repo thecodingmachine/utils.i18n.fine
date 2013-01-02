@@ -38,11 +38,21 @@
 		    		"file": "src/install.php"
 		    	}
 	    	],
-	    	"doc": {
-	    		"using_fine.html": "Using FINE",
-	    		"date_functions.html": "Date functions",
-	    		"currency_functions.html": "Currency functions"
-	    	}
+	    	"doc": [
+	    		{
+	    			"title": "Using FINE",
+	    			"url": "using_fine.html"
+	    		},
+	    		{
+	    			"title": "Date functions",
+	    			"url": "date_functions.html"
+	    		},
+	    		{
+	    			"title": "Currency functions",
+	    			"url": "currency_functions.html"
+	    		}
+	    	]
+	    	
 	    }
 	}
 }
