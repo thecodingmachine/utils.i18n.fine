@@ -5,7 +5,7 @@
  * See the file LICENSE.txt for copying permission.
  */
 
-
+/*
 use Mouf\MoufManager;
 use Mouf\MoufUtils;
 
@@ -18,9 +18,11 @@ MoufUtils::registerChooseInstanceMenuItem('htmlFineEditTranslationAnyInstanceMen
 MoufUtils::registerChooseInstanceMenuItem('htmlFineSupportedLanguagesMenuItem', 'Supported languages', 'javascript:chooseInstancePopup("FinePHPArrayTranslationService", "'.ROOT_URL.'mouf/editLabels/supportedLanguages?name=", "'.ROOT_URL.'")', 'htmlFineMainMenu', 30);
 MoufUtils::registerChooseInstanceMenuItem('htmlFineEnableDisable2MenuItem', 'Enable/Disable translation', 'mouf/editLabels/', 'htmlFineMainMenu', 40);
 MoufUtils::registerChooseInstanceMenuItem('htmlFineImportCSV2MenuItem', 'Import/Export', 'javascript:chooseInstancePopup("FinePHPArrayTranslationService", "'.ROOT_URL.'mouf/editLabels/excelimport?name=", "'.ROOT_URL.'")', 'htmlFineMainMenu', 50);*/
-
+/*
 // Controller declaration
-MoufManager::getMoufManager()->declareComponent('editLabels', 'Mouf\\Utils\\I18n\\Fine\\Controllres\\,EditLabelController', true);
-MoufManager::getMoufManager()->bindComponents('editLabels', 'template', 'moufTemplate');
-
+$moufManager = MoufManager::getMoufManager();
+$moufManager->declareComponent('editLabels', 'Mouf\\Utils\\I18n\\Fine\\Controllers\\EditLabelController', true);
+$moufManager->bindComponents('editLabels', 'template', 'moufTemplate');
+$moufManager->bindComponents('editLabels', 'content', 'block.content');
+*/
 ?>

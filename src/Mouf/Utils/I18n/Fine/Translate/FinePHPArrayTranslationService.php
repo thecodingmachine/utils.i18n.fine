@@ -13,8 +13,8 @@ use Mouf\Utils\I18n\Fine\Language\LanguageDetectionInterface;
  * 
  * @Component
  * @author Marc Teyssier
- * @ExtendedAction {"name":"Supported languages", "url":"mouf/editLabels/supportedLanguages", "default":false}
- * @ExtendedAction {"name":"Edit translations", "url":"mouf/editLabels/missinglabels", "default":false}
+ * @ExtendedAction {"name":"Supported languages", "url":"editLabels/supportedLanguages", "default":false}
+ * @ExtendedAction {"name":"Edit translations", "url":"editLabels/missinglabels", "default":false}
  */
 class FinePHPArrayTranslationService implements LanguageTranslationInterface {
 	

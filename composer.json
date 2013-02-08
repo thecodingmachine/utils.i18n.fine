@@ -38,6 +38,9 @@
 		    		"file": "src/install.php"
 		    	}
 	    	],
+			"require-admin": [
+    			"src/FineAdmin.php"
+    		],
 	    	"doc": [
 	    		{
 	    			"title": "Using FINE",
