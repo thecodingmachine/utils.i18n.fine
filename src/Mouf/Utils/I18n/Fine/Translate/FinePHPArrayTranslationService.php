@@ -6,6 +6,8 @@
  */
 namespace Mouf\Utils\I18n\Fine\Translate;
 
+use Mouf\Utils\I18n\Fine\FineMessageLanguage;
+
 use Mouf\Utils\I18n\Fine\Language\LanguageDetectionInterface;
 
 /**
@@ -120,7 +122,7 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface {
 			if ($this->myInstanceName == null) {
 				$this->myInstanceName = MoufManager::getMoufManager()->findInstanceName($this);
 			}
-			$value = $value.' <a href="'.ROOT_URL.'mouf/editLabels/editLabel?key='.$message.'&backto='.urlencode($_SERVER['REQUEST_URI']).'&msginstancename='.urlencode($this->myInstanceName).'">edit</a>';
+			$value = $value.' <a href="'.ROOT_URL.'vendor/mouf/mouf/editLabels/editLabel?key='.$message.'&backto='.urlencode($_SERVER['REQUEST_URI']).'&msginstancename='.urlencode($this->myInstanceName).'">edit</a>';
 		}
 	
 		return $value;
