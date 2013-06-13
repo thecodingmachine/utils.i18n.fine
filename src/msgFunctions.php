@@ -1,4 +1,6 @@
 <?php
+use Mouf\MoufManager;
+
 /*
  * Copyright (c) 2012 David Negrier
  * 
@@ -25,7 +27,7 @@ function iMsg($key) {
 	static $translationService = null;
 	if ($translationService == null) {
 		/* @var $translationService LanguageTranslationInterface */
-		$translationService = MoufManager::getMoufManager()->getInstance("translationService");
+		$translationService = MoufManager::getMoufManager()->getInstance("defaultTranslationService");
 	}
 	
 	$args = func_get_args();
@@ -58,7 +60,7 @@ function iMsgNoEdit($key) {
 	static $translationService = null;
 	if ($translationService == null) {
 		/* @var $translationService LanguageTranslationInterface */
-		$translationService = MoufManager::getMoufManager()->getInstance("translationService");
+		$translationService = MoufManager::getMoufManager()->getInstance("defaultTranslationService");
 	}
 	
 	$args = func_get_args();

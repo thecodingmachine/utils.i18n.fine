@@ -37,7 +37,7 @@ if ($moufManager->instanceExists("defaultTranslationService")) {
 } else {
 	$defaultTranslationService = $moufManager->createInstance("Mouf\\Utils\\I18n\\Fine\\Translate\\FinePHPArrayTranslationService");
 	$defaultTranslationService->setName("defaultTranslationService");
-	$defaultTranslationService->getProperty("i18nMessagePath")->setValue("vendor/mouf/utils.i18n.fine/resources/");
+	$defaultTranslationService->getProperty("i18nMessagePath")->setValue("resources/");
 	$defaultTranslationService->getProperty("languageDetection")->setValue($defaultLanguageDetection);
 }
 

@@ -49,10 +49,13 @@ $translationService->loadAllMessages();
 
 $languages = $translationService->getSupportedLanguages();
 
-if (array_search($language, $languages) === false) {
+if($language == 'default')
+	$file = 'message.php';
+else
+	$file = 'message_'.$language.'.php';
+if (array_search($language, $languages) === false || !file_exists(ROOT_PATH.$translationService->i18nMessagePath.$file)) {
 	$translationService->createLanguageFile($language);
 }
-
 if ($encode == "php") {
 	echo serialize(true);
 } elseif ($encode == "json") {

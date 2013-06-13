@@ -6,6 +6,12 @@
  */
 namespace Mouf\Utils\I18n\Fine\Translate;
 
+use Mouf\Validator\MoufValidatorResult;
+
+use Mouf\Validator\MoufValidatorInterface;
+
+use Mouf\MoufManager;
+
 use Mouf\Utils\I18n\Fine\FineMessageLanguage;
 
 use Mouf\Utils\I18n\Fine\Language\LanguageDetectionInterface;
@@ -18,7 +24,7 @@ use Mouf\Utils\I18n\Fine\Language\LanguageDetectionInterface;
  * @ExtendedAction {"name":"Supported languages", "url":"editLabels/supportedLanguages", "default":false}
  * @ExtendedAction {"name":"Edit translations", "url":"editLabels/missinglabels", "default":false}
  */
-class FinePHPArrayTranslationService implements LanguageTranslationInterface {
+class FinePHPArrayTranslationService implements LanguageTranslationInterface, MoufValidatorInterface  {
 	
 	/**
 	 * Detection language object
@@ -80,6 +86,54 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface {
 	 * @var string
 	 */
 	private $language = null;
+	
+	/**
+	 * Runs the validation of the instance.
+	 * Returns a MoufValidatorResult explaining the result.
+	 *
+	 * @return MoufValidatorResult
+	 */
+	public function validateInstance() {
+		$instanceName = MoufManager::getMoufManager()->findInstanceName($this);
+			
+		if (!file_exists(ROOT_PATH.$this->i18nMessagePath."message.php")) {
+			return new MoufValidatorResult(MoufValidatorResult::ERROR, "<b>Fine: </b>Unable to find default translation file for instances: ".ROOT_PATH.$this->i18nMessagePath."message.php.<br/>"
+															."You should create the following files:<br/>"
+															.$this->i18nMessagePath."message.php <a href='".ROOT_URL."vendor/mouf/mouf/editLabels/createMessageFile?name=".$instanceName."&selfedit=false&language=default'>(create this file)</a>");
+		}
+		else {
+			$this->loadAllMessages();
+			
+			// The array of messages by message, then by language:
+			// array(message_key => array(language => message))
+			$keys = $this->getAllKeys();
+			if($instanceName == 'defaultTranslationService')
+			error_log(var_export($keys, true));
+			foreach ($keys as $key) {
+				$msgs = $this->getMessageForAllLanguages($key);
+				if($instanceName == 'defaultTranslationService')
+			error_log(var_export($msgs, true));
+				if (!isset($msgs['default'])) {
+					$missingDefaultKeys[$instanceName][] = $key;
+				}
+			}
+			if (empty($missingDefaultKeys)) {
+				return new MoufValidatorResult(MoufValidatorResult::SUCCESS, "<b>Fine: </b>Default translation file found in all implementations of FinePHPArrayTranslationService.<br />
+																				Default translation is available for all messages.");
+			} else {
+				$html = "";
+				foreach ($missingDefaultKeys as $instanceName=>$missingKeys) {
+					$html .= "<b>Fine: </b>A default translation in '".$instanceName."' is missing for these messages: ";
+					foreach ($missingKeys as $missingDefaultKey) {
+						$html .= "<a href='".ROOT_URL."vendor/mouf/mouf/editLabels/editLabel?key=".urlencode($missingDefaultKey)."&language=default&backto=".urlencode(ROOT_URL)."mouf/&msginstancename=".urlencode($instanceName)."'>".$missingDefaultKey."</a> ";
+					}
+					$html .= "<hr/>";
+				}
+				return new MoufValidatorResult(MoufValidatorResult::WARN, $html);
+			}
+			
+		}
+	}
 	
 	/**
 	 * Retrieve the translation of code or message.

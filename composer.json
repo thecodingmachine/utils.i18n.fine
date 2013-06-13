@@ -43,15 +43,19 @@
 	    	"doc": [
 	    		{
 	    			"title": "Using FINE",
-	    			"url": "doc/using_fine.html"
+	    			"url": "doc/using_fine.md"
+	    		},
+	    		{
+	    			"title": "Tutorial",
+	    			"url": "doc/tutorial.md"
 	    		},
 	    		{
 	    			"title": "Date functions",
-	    			"url": "doc/date_functions.html"
+	    			"url": "doc/date_functions.md"
 	    		},
 	    		{
 	    			"title": "Currency functions",
-	    			"url": "doc/currency_functions.html"
+	    			"url": "doc/currency_functions.md"
 	    		}
 	    	]
 	    	

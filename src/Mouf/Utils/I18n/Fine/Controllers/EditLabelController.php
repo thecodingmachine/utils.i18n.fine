@@ -99,7 +99,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 	/**
 	 * @Action
 	 */
-	public function editLabel($key, $backto=null, $language = null, $msginstancename="translationService" ,$selfedit = "false", $saved = false) {
+	public function editLabel($key, $backto=null, $language = null, $msginstancename="defaultTranslationService" ,$selfedit = "false", $saved = false) {
 		/*if (!SessionUtils::isMessageEditionMode() && !SessionUtils::isAdmin()) {
 			throw new ApplicationException('editlabel.editlabel.messageeditionmoderequired.title','editlabel.editlabel.messageeditionmoderequired.text');
 		}*/
@@ -135,7 +135,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @Action
 	 * @Logged
 	 */
-	public function saveLabel($key, $label, $language = null, $delete = null, $save = null, $back = null, $backto = null, $msginstancename="translationService" ,$selfedit = "false") {
+	public function saveLabel($key, $label, $language = null, $delete = null, $save = null, $back = null, $backto = null, $msginstancename="defaultTranslationService" ,$selfedit = "false") {
 		$this->msgInstanceName = $msginstancename;
 		if ($back) {
 			header("Location: ".$backto);	
@@ -151,7 +151,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @Logged
 	 * @param string $name The name of the Mouf instance representing the translator
 	 */
-	public function missinglabels($name = "translationService", $selfedit = "false") {
+	public function missinglabels($name = "defaultTranslationService", $selfedit = "false") {
 		$this->msgInstanceName = $name;
 		$this->selfedit =$selfedit;
 		
@@ -175,7 +175,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @Action
 	 * @Logged
 	 */
-	public function supportedLanguages($name = "translationService", $selfedit="false") {
+	public function supportedLanguages($name = "defaultTranslationService", $selfedit="false") {
 		$this->msgInstanceName = $name;
 		$this->selfedit =$selfedit;
 		
@@ -186,6 +186,19 @@ class EditLabelController extends Controller implements MoufSearchable {
 		$this->content->addFile('../utils.i18n.fine/src/views/supportedLanguages.php', $this);
 		$this->template->toHtml();
 	}
+
+	/**
+	 * Displays the page that will allow the user to add a new language.
+	 *
+	 * @Action
+	 * @Logged
+	 */
+	public function createMessageFile($name = "defaultTranslationService", $selfedit="false", $language) {
+	
+		$this->addTranslationLanguageFromService(($selfedit == "true"), $name, $language);
+		
+		header('location:'.$_SERVER['HTTP_REFERER']);
+	}
 	
 	/**
 	 * Adds a language to the list of supported languages
@@ -194,7 +207,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @Logged
 	 * @param string $language
 	 */
-	public function addSupportedLanguage($language, $name = "translationService", $selfedit="false") {
+	public function addSupportedLanguage($language, $name = "defaultTranslationService", $selfedit="false") {
 		$this->addTranslationLanguageFromService(($selfedit == "true"), $name, $language);
 		
 		// Once more to reaload languages list
@@ -210,7 +223,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @param string $name
 	 * @param string $search
 	 */
-	public function searchLabel($msginstancename = "translationService", $selfedit = "false", $search, $language_search = null) {
+	public function searchLabel($msginstancename = "defaultTranslationService", $selfedit = "false", $search, $language_search = null) {
 		$this->msgInstanceName = $msginstancename;
 		$this->selfedit = $selfedit;
 	
@@ -286,7 +299,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @return array
 	 * @throws Exception
 	 */
-	protected static function getAllMessagesFromService($selfEdit, $msgInstanceName = "translationService", $language = null) {
+	protected static function getAllMessagesFromService($selfEdit, $msgInstanceName = "defaultTranslationService", $language = null) {
 
 		$url = MoufReflectionProxy::getLocalUrlToProject()."../utils.i18n.fine/src/direct/get_all_messages.php?msginstancename=".urlencode($msgInstanceName)."&selfedit=".(($selfEdit)?"true":"false")."&language=".$language;
 		
