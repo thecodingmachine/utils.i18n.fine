@@ -82,13 +82,17 @@ Dynamically translating your code
 ---------------------------------
 
 Fine has a very nice feature called "automated message translation". You can enable or disable this mode using the "Enable/Disable translation" menu.
-<img src="images/enableDisableTranslation.jpg" alt="" />
+
+![FINE enable/disable translation](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/enableDisableTranslation.jpg)
+
 When this mode is enabled, in your application, all labels will have a trailing "edit" link. By clicking on this link, you will be directed to the "translation" page.<br />
 You must add session_start function in your application to use this functionnality !
 
 A normal page (translation disabled)
+
 ![FINE translation disabled](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/translationDisabled.jpg)
 A page with translation enabled
+
 ![FINE translation enabled](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/translationEnabled.jpg)
 
 Where are messages stored

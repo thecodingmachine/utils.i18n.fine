@@ -87,25 +87,27 @@ Here is the translationService instance:
 By default, the *defaultLanguageDetection* is a BrowserLanguageDetection class, that analyses the language of the browser.
 You can of course change that. For instance the domainLanguageDetection can be used to define the language based on the domain name of the website.
 
-If you use the domaineLanguageDetection, you must add value to the array. There are 2 values:
+If you use the domainLanguageDetection, you must add value to the array. There are 2 values:
 - domain: name domain. Example: www.thecodingmachine.com;
 - value: only code language. Exemple: en
 
-![FINE translationService](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/mouf_domainelanguagedetection.png)
+![FINE translationService](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/mouf_domainlanguagedetection.png)
 
 
 Dynamically translating your code
 ---------------------------------
 
 Fine has a very nice feature called "automated message translation". You can enable or disable this mode using the "Enable/Disable translation" menu.
+
 ![FINE enable/disable translation](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/enableDisableTranslation.jpg)
 
 When this mode is enabled, in your application, all labels will have a trailing "edit" link. By clicking on this link, you will be directed to the "translation" page.
 
 A normal page (translation disabled)
+
 ![FINE translation disabled](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/translationDisabled.jpg)
-<img src="images/translationDisabled.jpg" />
 A page with translation enabled
+
 ![FINE translation enabled](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/translationEnabled.jpg)
 
 Best practices
