@@ -4,15 +4,15 @@ Fine installation guide
 Dependencies
 ------------
 
-Splash comes as a *Composer* package and requires the "Mouf" framework to run.
+Fine comes as a *Composer* package and requires the "Mouf" framework to run.
 The first step is therefore to [install Mouf](http://www.mouf-php.com/).
 
-Once Mouf is installed, you can process to the Splash installation.
+Once Mouf is installed, you can process to the Fine installation.
 
-Install Splash
+Install Fine
 --------------
 
-Edit your *composer.json* file, and add a dependency on *mouf/mvc.splash*.
+Edit your *composer.json* file, and add a dependency on *mouf/utils.i18n.fine*.
 
 A minimal *composer.json* file might look like this:
 ```
@@ -41,8 +41,8 @@ If you do not understand what "namespace" or "PSR-0" means, *stop right now*, an
 At this point, the Fine packages should be downloaded and installed (and Mouf should be set up). Start the Mouf admin interface at http://localhost/{yourproject}/vendor/mouf/mouf
 There is an install process to run, so just run it.
 
-![Splash install screenshot](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/install_splash.png)
-![Splash install screenshot](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/install_splash_2.png)
+![Fine install screenshot](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/install_fine.png)
+![Fine install screenshot](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/install_fine_2.png)
 
 The Fine install process will:
  - Create a "fine" instance of the "Fine" class. The "fine" instance contains the global configuration for Fine (default resources path, language detector, etc...).
@@ -53,7 +53,7 @@ Configure your instance
 
 In the edit interface you can change the language Detection and the file path where resources are saved.
 
-![Splash menu](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/install_splash_3.png)
+![Fine menu](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/install_fine_3.png)
 
 There are many possiblity to detect the language.
  - With the user browser

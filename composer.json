@@ -42,6 +42,10 @@
     		],
 	    	"doc": [
 	    		{
+	    			"title": "Install,
+	    			"url": "doc/install.md"
+	    		},
+	    		{
 	    			"title": "Using FINE",
 	    			"url": "doc/using_fine.md"
 	    		},
