@@ -9,7 +9,7 @@ namespace Mouf\Utils\I18n\Fine\Language;
 use Mouf\Utils\Value\ValueInterface;
 
 /**
- * Turns a languageDetection to a valueInterface
+ * Turns a languageDetection into a valueInterface
  * 
  * @author Kevin Nguyen
  * @Component
