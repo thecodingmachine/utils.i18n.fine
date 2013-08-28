@@ -68,10 +68,11 @@ class FineMessageLanguage {
 
 		$this->deleteFile($this->language);
 		
-		if($this->language == "default")
+		if($this->language == "default") {
 			$file_default = $this->folder."message.php";
-		else
+		} else {
 			$file_default = $this->folder."message_".$this->language.".php";
+		}
 
 		$this->createFile($file_default);
 			
@@ -79,24 +80,24 @@ class FineMessageLanguage {
 		foreach ($this->msg as $key => $value) {
 			$strs = preg_split('/[\.\-\_]/', $key);
 			$str = strtolower($strs[0]);
-			if($str && $str != $key && preg_match('/[a-z0-9\.\-\_]*/', $str)) {
+			if($str && count($strs) != 1 && preg_match('/[a-z0-9\.\-\_]*/', $str)) {
 				$msg[$str][$key] = $value;
-			}
-			else
+			} else {
 				$msg["default"][$key] = $value;
+			}
 		}
 		
 		foreach ($msg as $custom => $list) {
-			if($custom == "default")
+			if($custom == "default") {
 				$file = $file_default;
-			else {
+			} else {
 				$file = $this->folder."message_custom_".$this->language."_".$custom.".php";
 				$this->createFile($file);
 			}
 			$fp = fopen($file, "w");
 			fwrite($fp, "<?php\n");
 			foreach ($list as $key=>$message) {
-				fwrite($fp, '$msg[\''.str_replace("'","\\'", $key).'\']="'.str_replace('"','\\"', $message).'";'."\n");
+				fwrite($fp, '$msg['.var_export($key, true).']='.var_export($message, true).';'."\n");
 			}
 			fwrite($fp, "?>\n");
 			fclose($fp);

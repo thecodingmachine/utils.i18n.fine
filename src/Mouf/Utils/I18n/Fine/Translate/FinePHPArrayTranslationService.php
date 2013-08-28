@@ -15,6 +15,7 @@ use Mouf\MoufManager;
 use Mouf\Utils\I18n\Fine\FineMessageLanguage;
 
 use Mouf\Utils\I18n\Fine\Language\LanguageDetectionInterface;
+use Mouf\Utils\I18n\Fine\Language\BrowserLanguageDetection;
 
 /**
  * Used to save all translation in a php array.
@@ -445,19 +446,17 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 				// Does the directory exist?
 				$dir = dirname($file);
 				if (!file_exists($dir)) {
-					$result = mkdir($dir, 0755, true);
+					$old = umask(0);
+					$result = mkdir($dir, 0775, true);
+					umask($old);
 					
 					if ($result == false) {
-						$exception = new ApplicationException();
-						$exception->setTitle("unable.to.create.directory.title", $dir);
-						$exception->setMessage("unable.to.create.directory.text", $dir);
+						$exception = new \Exception("Unable to create directory ".$dir);
 						throw $exception;
 					}
 				}
 			} else {			
-				$exception = new ApplicationException();
-				$exception->setTitle("unable.to.write.file.title", $file);
-				$exception->setMessage("unable.to.write.file.text", $file);
+				$exception = new \Exception("Unable to write file ".$file);
 				throw $exception;
 			}
 		}

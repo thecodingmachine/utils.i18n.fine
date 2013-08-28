@@ -46,27 +46,23 @@ class FineMessageFile {
 				// Does the directory exist?
 				$dir = dirname($this->file);
 				if (!file_exists($dir)) {
-					$result = mkdir($dir, 0755, true);
-					
+					$old = umask(0);
+					$result = mkdir($dir, 0775, true);
+					umask($old);
+						
 					if ($result == false) {
-						$exception = new ApplicationException();
-						$exception->setTitle("unable.to.create.directory.title", $dir);
-						$exception->setMessage("unable.to.create.directory.text", $dir);
-						throw $exception;
+						throw new \Exception("Unable to create directory ".$dir);
 					}
 				}
 			} else {			
-				$exception = new ApplicationException();
-				$exception->setTitle("unable.to.write.file.title", $this->file);
-				$exception->setMessage("unable.to.write.file.text", $this->file);
-				throw $exception;
+				throw new \Exception("Unable to create file ".$this->file);
 			}
 		}
 
 		$fp = fopen($this->file, "w");
 		fwrite($fp, "<?php\n");
 		foreach ($this->msg as $key=>$message) {
-			fwrite($fp, '$msg[\''.str_replace("'","\\'", $key).'\']="'.str_replace('"','\\"', $message).'";'."\n");
+			fwrite($fp, '$msg['.var_export($key, true).']='.var_export($message, true).';'."\n");
 		}
 		fwrite($fp, "?>\n");
 		fclose($fp);
