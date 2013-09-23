@@ -115,7 +115,9 @@ class FineMessageLanguage {
 				// Does the directory exist?
 				$dir = dirname($file);
 				if (!file_exists($dir)) {
+					$old = umask(0);
 					$result = mkdir($dir, 0755, true);
+					umask($old);
 					
 					if ($result == false) {
 						$exception = new ApplicationException();
