@@ -98,7 +98,7 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 		$instanceName = MoufManager::getMoufManager()->findInstanceName($this);
 			
 		if (!file_exists(ROOT_PATH.$this->i18nMessagePath."message.php")) {
-			return new MoufValidatorResult(MoufValidatorResult::ERROR, "<b>Fine: </b>Unable to find default translation file for instances: ".ROOT_PATH.$this->i18nMessagePath."message.php.<br/>"
+			return new MoufValidatorResult(MoufValidatorResult::ERROR, "<b>Fine: </b>Unable to find default translation file for instance: <code>".ROOT_PATH.$this->i18nMessagePath."message.php</code>.<br/>"
 															."You should create the following files:<br/>"
 															.$this->i18nMessagePath."message.php <a href='".ROOT_URL."vendor/mouf/mouf/editLabels/createMessageFile?name=".$instanceName."&selfedit=false&language=default'>(create this file)</a>");
 		}
@@ -119,7 +119,7 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 				}
 			}
 			if (empty($missingDefaultKeys)) {
-				return new MoufValidatorResult(MoufValidatorResult::SUCCESS, "<b>Fine: </b>Default translation file found in all implementations of FinePHPArrayTranslationService.<br />
+				return new MoufValidatorResult(MoufValidatorResult::SUCCESS, "<b>Fine: </b>Default translation file found in instance <code>$instanceName</code>.<br />
 																				Default translation is available for all messages.");
 			} else {
 				$html = "";
@@ -391,12 +391,41 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	}
 
 	/**
+	 * Loads and returns all the messages with languages, in a big array.
+	 */
+	public function getAllMessages($language = null) {
+	
+		$this->loadAllMessages();
+
+		// The array of messages by message, then by language:
+		// array(message_key => array(language => message))
+		$msgs = array();
+	
+		$keys = $this->getAllKeys();
+	
+		$languages = $this->getSupportedLanguages();
+	
+		foreach ($keys as $key) {
+			$msgs[$key] = $this->getMessageForAllLanguages($key, $language);
+		}
+	
+		ksort($msgs);
+		$response = array("languages"=>$languages, "msgs"=>$msgs);
+		return $response;
+	}
+	
+	/**
 	 * Get the message for language.
 	 * 
 	 * @param string $key
 	 * @return array<string, string>
 	 */
 	public function getMessageForAllLanguages($key, $lang = null) {
+		
+		if (!$this->messages) {
+			$this->loadAllMessages();
+		}
+		
 		$messageArray = array();
 		foreach ($this->messages as $language=>$messageLanguage) {
 			if(is_null($lang) || $lang == "")
@@ -431,6 +460,7 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	
 	/**
 	 * Creates the file for specified language.
+	 * If the file already exists, the function does nothing.
 	 *
 	 * @param string $language
 	 */
@@ -461,7 +491,47 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 			}
 		}
 		
-		$fp = fopen($file, "w");
-		fclose($fp);
+		if (!file_exists($file)) {
+			$fp = fopen($file, "w");
+			fclose($fp);
+			chmod($file, 0664);
+		}
+	}
+	
+	/**
+	 * Sets and saves a new message translation.
+	 * 
+	 * @param string $key
+	 * @param string $value
+	 * @param string $language
+	 */
+	public function setMessage($key, $value, $language) {
+		$messageFile = $this->getMessageLanguageForLanguage($language);
+		$messageFile->setMessage($key, $value);
+		$messageFile->save();
+	}
+	
+	/**
+	 * Sets and saves many messages at once for a given language.
+	 *
+	 * @param array $messages
+	 * @param string $language
+	 */
+	public function setMessages(array $messages, $language) {
+		$messageFile = $this->getMessageLanguageForLanguage($language);
+		$messageFile->setMessages($messages);
+		$messageFile->save();
+	}
+	
+	/**
+	 * Deletes a message translation.
+	 *
+	 * @param string $key
+	 * @param string $language
+	 */
+	public function deleteMessage($key, $language) {
+		$messageFile = $this->getMessageLanguageForLanguage($language);
+		$messageFile->deleteMessage($key);
+		$messageFile->save();
 	}
 }

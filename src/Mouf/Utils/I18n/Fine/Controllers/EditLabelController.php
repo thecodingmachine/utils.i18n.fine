@@ -17,6 +17,7 @@ use Mouf\MoufSearchable;
 use Mouf\Mvc\Splash\Controllers\Controller;
 
 use Exception;
+use Mouf\InstanceProxy;
 
 /*
  * Copyright (c) 2012 David Negrier
@@ -287,7 +288,7 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @return string
 	 */
 	public function getSearchModuleName() {
-		return "Fine 2.1 for translations";
+		return "Fine for translations";
 	}
 	
 	/**
@@ -300,18 +301,8 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @throws Exception
 	 */
 	protected static function getAllMessagesFromService($selfEdit, $msgInstanceName = "defaultTranslationService", $language = null) {
-
-		$url = MoufReflectionProxy::getLocalUrlToProject()."../utils.i18n.fine/src/direct/get_all_messages.php?msginstancename=".urlencode($msgInstanceName)."&selfedit=".(($selfEdit)?"true":"false")."&language=".$language;
-		
-		$response = self::performRequest($url);
-
-		$obj = unserialize($response);
-		
-		if ($obj === false) {
-			throw new Exception("Unable to unserialize message:\n".$response."\n<br/>URL in error: <a href='".plainstring_to_htmlprotected($url)."'>".plainstring_to_htmlprotected($url)."</a>");
-		}
-		
-		return $obj;
+		$translationService = new InstanceProxy($msgInstanceName, $selfEdit);
+		return $translationService->getAllMessages($language);
 	}
 	
 	/**
@@ -323,19 +314,9 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @return array
 	 * @throws Exception
 	 */
-	protected static function getAllTranslationsForMessageFromService($selfEdit, $msgInstanceName, $key) {
-
-		$url = MoufReflectionProxy::getLocalUrlToProject()."../utils.i18n.fine/src/direct/get_message_translations.php?msginstancename=".urlencode($msgInstanceName)."&selfedit=".(($selfEdit)?"true":"false")."&key=".urlencode($key);
-		
-		$response = self::performRequest($url);
-
-		$obj = unserialize($response);
-		
-		if ($obj === false) {
-			throw new Exception("Unable to unserialize message:\n".$response."\n<br/>URL in error: <a href='".plainstring_to_htmlprotected($url)."'>".plainstring_to_htmlprotected($url)."</a>");
-		}
-		
-		return $obj;
+	protected function getAllTranslationsForMessageFromService($selfEdit, $msgInstanceName, $key) {
+		$translationService = new InstanceProxy($msgInstanceName, $selfEdit);
+		return $translationService->getMessageForAllLanguages($key);
 	}
 	
 
@@ -350,22 +331,8 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @throws Exception
 	 */
 	protected static function setTranslationsForMessageFromService($selfEdit, $msgInstanceName, $language, $translations) {
-
-		$url = MoufReflectionProxy::getLocalUrlToProject()."../utils.i18n.fine/src/direct/set_messages_translation.php";
-		
-		$post = array("msginstancename" => $msgInstanceName,
-						"selfedit" => (($selfEdit)?"true":"false"),
-						"language" => $language,
-						"translations" => serialize($translations));
-		$response = self::performRequest($url, $post);
-
-		$obj = unserialize($response);
-		
-		if ($obj === false) {
-			throw new Exception("Unable to unserialize message:\n".$response."\n<br/>URL in error: <a href='".plainstring_to_htmlprotected($url)."'>".plainstring_to_htmlprotected($url)."</a>");
-		}
-		
-		return $obj;
+		$translationService = new InstanceProxy($msgInstanceName, $selfEdit);
+		return $translationService->setMessages($translations, $language);
 	}
 	
 	/**
@@ -380,19 +347,16 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	protected static function setTranslationForMessageFromService($selfEdit, $msgInstanceName, $key, $label, $language, $delete) {
+	protected function setTranslationForMessageFromService($selfEdit, $msgInstanceName, $key, $label, $language, $delete) {
 
-		$url = MoufReflectionProxy::getLocalUrlToProject()."../utils.i18n.fine/src/direct/set_message_translation.php?msginstancename=".urlencode($msgInstanceName)."&selfedit=".(($selfEdit)?"true":"false")."&key=".urlencode($key)."&language=".urlencode($language)."&delete=".urlencode($delete);
-
-		$response = MoufReflectionProxy::performRequest($url, array("label" => $label));
-
-		$obj = unserialize($response);
-		
-		if ($obj === false) {
-			throw new Exception("Unable to unserialize message:\n".$response."\n<br/>URL in error: <a href='".plainstring_to_htmlprotected($url)."'>".plainstring_to_htmlprotected($url)."</a>");
+		if ($delete) {
+			$translationService = new InstanceProxy($msgInstanceName, $selfEdit);
+			return $translationService->deleteMessage($key, $language);
+		} else {
+			$translationService = new InstanceProxy($msgInstanceName, $selfEdit);
+			return $translationService->setMessage($key, $label, $language);
 		}
-		
-		return $obj;
+
 	}
 	
 	/**
@@ -404,40 +368,9 @@ class EditLabelController extends Controller implements MoufSearchable {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	protected static function addTranslationLanguageFromService($selfEdit, $msgInstanceName, $language) {
-
-		$url = MoufReflectionProxy::getLocalUrlToProject()."../utils.i18n.fine/src/direct/create_language_file.php?msginstancename=".urlencode($msgInstanceName)."&selfedit=".(($selfEdit)?"true":"false")."&language=".urlencode($language);
-		 
-		$response = self::performRequest($url);
-
-		$obj = unserialize($response);
-		
-		if ($obj === false) {
-			throw new Exception("Unable to unserialize message:\n".$response."\n<br/>URL in error: <a href='".plainstring_to_htmlprotected($url)."'>".plainstring_to_htmlprotected($url)."</a>");
-		}
-		
-		return $obj;
-	}
-	
-	private static function performRequest($url, $post = array()) {
-		// preparation de l'envoi
-		$ch = curl_init();
-				
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		if($post) {
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-		} else
-			curl_setopt($ch, CURLOPT_POST, false);
-		$response = curl_exec($ch );
-		
-		if( curl_error($ch) ) { 
-			throw new Exception("An error occured: ".curl_error($ch));
-		}
-		curl_close( $ch );
-		
-		return $response;
+	protected function addTranslationLanguageFromService($selfEdit, $msgInstanceName, $language) {
+		$finePhpArrayTranslationService = new InstanceProxy($msgInstanceName, $selfEdit);
+		$finePhpArrayTranslationService->createLanguageFile($language);
 	}
 
 	/**
