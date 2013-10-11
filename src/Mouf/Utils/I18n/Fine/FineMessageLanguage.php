@@ -88,6 +88,7 @@ class FineMessageLanguage {
 			}
 		}
 		
+		$old = umask(00002);
 		foreach ($msg as $custom => $list) {
 			if($custom == "default") {
 				$file = $file_default;
@@ -103,6 +104,7 @@ class FineMessageLanguage {
 			fwrite($fp, "?>\n");
 			fclose($fp);
 		}
+		umask($old);
 	}
 
 	private function deleteFile($language) {
