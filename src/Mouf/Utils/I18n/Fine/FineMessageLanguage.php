@@ -119,7 +119,7 @@ class FineMessageLanguage {
 				$dir = dirname($file);
 				if (!file_exists($dir)) {
 					$old = umask(0);
-					$result = mkdir($dir, 0755, true);
+					$result = mkdir($dir, 0775, true);
 					umask($old);
 					
 					if ($result == false) {
