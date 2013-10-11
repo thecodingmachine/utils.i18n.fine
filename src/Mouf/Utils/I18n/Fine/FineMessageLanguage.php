@@ -6,6 +6,7 @@
  */
 namespace Mouf\Utils\I18n\Fine;
 
+use Mouf\MoufException;
 /**
  * The FineMessageLanguage class represents a PHP resource file that can be loaded / saved / modified.
  * There are many files for on language. Files are write with the start information of the key. Function used the separator ., - or _. 
@@ -120,17 +121,11 @@ class FineMessageLanguage {
 					umask($old);
 					
 					if ($result == false) {
-						$exception = new ApplicationException();
-						$exception->setTitle("unable.to.create.directory.title", $dir);
-						$exception->setMessage("unable.to.create.directory.text", $dir);
-						throw $exception;
+						throw new MoufException("Unable to create directory ".$dir);
 					}
 				}
-			} else {			
-				$exception = new ApplicationException();
-				$exception->setTitle("unable.to.write.file.title", $file);
-				$exception->setMessage("unable.to.write.file.text", $file);
-				throw $exception;
+			} else {
+				throw new MoufException("Unable to write file ".$file);
 			}
 		} else {
 			// Empties the file
