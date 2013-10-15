@@ -1,5 +1,6 @@
 <?php
 use Mouf\MoufManager;
+use Mouf\Utils\I18n\Fine\FineCurrencyUtils;
 
 /*
  * Copyright (c) 2012 David Negrier
