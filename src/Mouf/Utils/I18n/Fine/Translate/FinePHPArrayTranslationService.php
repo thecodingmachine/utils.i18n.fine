@@ -42,6 +42,12 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	private $msg = null;
 	
 	/**
+	 * Store the file load to optimize performance and call only one time each translation files.
+	 * @var string[]
+	 */
+	private $loadFile = array();
+	
+	/**
 	 * The path to the directory storing the translations.
 	 * <p>The directory path should end with a "/".</p>
 	 * <p>Each file in this directory is a PHP file containing an array variable named $msg. The key is the code or message id, the value is translation.<br/>
@@ -108,12 +114,8 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 			// The array of messages by message, then by language:
 			// array(message_key => array(language => message))
 			$keys = $this->getAllKeys();
-			if($instanceName == 'defaultTranslationService')
-			error_log(var_export($keys, true));
 			foreach ($keys as $key) {
 				$msgs = $this->getMessageForAllLanguages($key);
-				if($instanceName == 'defaultTranslationService')
-			error_log(var_export($msgs, true));
 				if (!isset($msgs['default'])) {
 					$missingDefaultKeys[$instanceName][] = $key;
 				}
@@ -147,18 +149,21 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 		if($this->language === null) {
 			$this->initLanguage();
 		}
-		if($this->msg_edition_mode === null)
+		if($this->msg_edition_mode === null) {
 			$this->msg_edition_mode = isset($_SESSION["FINE_MESSAGE_EDITION_MODE"])?$_SESSION["FINE_MESSAGE_EDITION_MODE"]:false;
+		}
 
 		$args = func_get_args();
 	
 		//Load the main file
-		if($this->msg === null)
+		if($this->msg === null) {
 			$this->retrieveMessages($this->language);
+		}
 			
 		//If the translation is not in the main file, load the custom file associated to the message
-		if(!isset($this->msg[$message]))
+		if(!isset($this->msg[$message])) {
 			$this->retrieveCustomMessages($message, $this->language);
+		}
 			
 		if (isset($this->msg[$message])) {
 			$value = $this->msg[$message];
@@ -198,11 +203,13 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 
 		$args = func_get_args();
 	
-		if($this->msg === null)
+		if($this->msg === null) {
 			$this->retrieveMessages($this->language);
+		}
 			
-		if(!isset($this->msg[$message]))
+		if(!isset($this->msg[$message])) {
 			$this->retrieveCustomMessages($message, $this->language);
+		}
 
 		if (isset($this->msg[$message])) {
 			$value = $this->msg[$message];
@@ -274,10 +281,16 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	 */
 	private function retrieveMessages($language = null) {
 		$msg = array();
-		@include_once ROOT_PATH.$this->i18nMessagePath.'message.php';
+		$file = ROOT_PATH.$this->i18nMessagePath.'message.php';
+		if(!isset($this->loadFile[$file]) && file_exists($file)) {
+			@include $file;
+			$this->loadFile[$file] = true;
+		}
 		if($language) {
-			if (file_exists(ROOT_PATH.$this->i18nMessagePath.'message_'.$language.'.php')){
-				require_once ROOT_PATH.$this->i18nMessagePath.'message_'.$language.'.php';
+			$file = ROOT_PATH.$this->i18nMessagePath.'message_'.$language.'.php';
+			if (!isset($this->loadFile[$file]) && file_exists($file)){
+				require $file;
+				$this->loadFile[$file] = true;
 			}
 		}
 		$this->msg = $msg;
@@ -297,15 +310,35 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 		$strs = preg_split('/[\.\-\_]/', $key);
 		$str = strtolower($strs[0]);
 		if($str && $str != $key && preg_match('/[a-z0-9\.\-\_]*/', $str)) {
-			if (file_exists(ROOT_PATH.$this->i18nMessagePath.'message_custom_default_'.$str.'.php'))
-				require_once ROOT_PATH.$this->i18nMessagePath.'message_custom_default_'.$str.'.php';
-			if (file_exists(ROOT_PATH.$this->i18nMessagePath.'message_custom_'.$language.'_'.$str.'.php'))
-				require_once ROOT_PATH.$this->i18nMessagePath.'message_custom_'.$language.'_'.$str.'.php';
+			$file = ROOT_PATH.$this->i18nMessagePath.'message_custom_default_'.$str.'.php';
+			if (!isset($this->loadFile[$file]) && file_exists($file)) {
+				require $file;
+				$this->loadFile[$file] = true;
+			}
+
+			$file = ROOT_PATH.$this->i18nMessagePath.'message_custom_'.$language.'_'.$str.'.php';
+			if (!isset($this->loadFile[$file]) && file_exists($file)) {
+				require $file;
+				$this->loadFile[$file] = true;
+			}
 			if(isset($msg))
 				$this->msg = array_merge($msg, $this->msg);
 		}
 	}
 	
+	/**
+	 * Use this function to force the language.
+	 * Don't forget to call this function with null to restore default parameters. 
+	 * 
+	 * @param string $language
+	 */
+	public function forceLanguage($language) {
+		if($this->language != $language) {
+			$this->language = $language;
+			$this->loadFile = array();
+			$this->msg = null;
+		}
+	}
 	
 	/***************************/
 	/****** Edition mode *******/
