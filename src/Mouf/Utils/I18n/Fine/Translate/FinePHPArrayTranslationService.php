@@ -336,13 +336,30 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	 * @return bool
 	 */
 	public function forceLanguage($language) {
-		if($this->language != $language) {
+		$changeLanguage = false;
+		// Check if the user set null to retrieve the initial language
+		// If the initial language is already recovered fine don't require the file
+		if($language === null) {
+			// Save old language
+			$language = $this->language;
+			// Retrieve initial language
+			$this->initLanguage();
+			// Chekck if the language change
+			if($this->language != $language) {
+				$changeLanguage = true;
+			}
+		}
+		// If the user ask a new language not set
+		elseif($this->language != $language) {
 			$this->language = $language;
+			$changeLanguage = true;
+		}
+		
+		// Empty all the old language
+		if($changeLanguage) {
 			$this->loadFile = array();
 			$this->msg = null;
-			return true;
 		}
-		return false;
 	}
 	
 	/***************************/
