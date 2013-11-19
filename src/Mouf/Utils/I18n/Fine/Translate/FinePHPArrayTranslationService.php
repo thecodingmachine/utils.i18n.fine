@@ -329,8 +329,11 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	/**
 	 * Use this function to force the language.
 	 * Don't forget to call this function with null to restore default parameters. 
+	 * Return true if the language change, else the language is the same,
+	 * this function return false
 	 * 
 	 * @param string $language
+	 * @return bool
 	 */
 	public function forceLanguage($language) {
 		if($this->language != $language) {
