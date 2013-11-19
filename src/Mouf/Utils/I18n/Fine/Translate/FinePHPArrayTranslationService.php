@@ -337,7 +337,9 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 			$this->language = $language;
 			$this->loadFile = array();
 			$this->msg = null;
+			return true;
 		}
+		return false;
 	}
 	
 	/***************************/
