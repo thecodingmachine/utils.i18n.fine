@@ -27,10 +27,10 @@ If you use the domaineLanguageDetection, you must add value to the array. There 
  - value: only code language. Exemple: en
 
 <img src="images/mouf_domainelanguagedetection.png" alt="" />
-![FINE instance domain detection](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/mouf_domainlanguagedetection.png)
+![FINE instance domain detection](images/mouf_domainlanguagedetection.png)
 
 In the administration, you should see 3 new menus in the Mouf User Interface:
-![FINE menu](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/fineMenu.jpg)
+![FINE menu](images/fineMenu.jpg)
 
 Using the Fine User Interface
 -----------------------------
@@ -39,10 +39,10 @@ Fine uses the "browser" default language to decide in which language the message
 If the language is not available (for instance if the browser language is "Chinese", but if there is no chinese translataion,
 Fine will use the "default" language.
 The "Supported languages" menu will help you add new supported languages:
-![FINE Supported Languages screen](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/supportedLanguages.jpg)
+![FINE Supported Languages screen](images/supportedLanguages.jpg)
 
 By clicking on the "Find Missing Labels" menu, a screen listing all existing labels will be displayed:
-![FINE Missing labels screen](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/missingLabels.jpg)
+![FINE Missing labels screen](images/missingLabels.jpg)
 
 On this page, the list of all translated labels is shown in a table. There is one column for each language.
 In the sample screenshot, there are 2 supported languages: the default language and French. On this screen,
@@ -71,29 +71,29 @@ Labels can contain parameters. In this case, parameters will be inserted at runt
 For instance:
 ```
 // The label you defined
-form.invalidMail="Error. {0} is not a valid mail."
+form.invalidMail="Error. {mail} is not a valid mail."
 
 // How to call the eMsg function. 
-eMsg("form.invalidMail", $mail).
+eMsg("form.invalidMail", array('mail'=>$mail)).
 ```
-The ```{0}``` label will be dynamically replaced with the "$mail" variable. Of course, you can put {1}, {2}, {3}... in your labels and pass additional parameters to ```iMsg``` or ```eMsg``` function.
+The ```{mail}``` label will be dynamically replaced with the "$mail" variable.
 
 Dynamically translating your code
 ---------------------------------
 
 Fine has a very nice feature called "automated message translation". You can enable or disable this mode using the "Enable/Disable translation" menu.
 
-![FINE enable/disable translation](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/enableDisableTranslation.jpg)
+![FINE enable/disable translation](images/enableDisableTranslation.jpg)
 
 When this mode is enabled, in your application, all labels will have a trailing "edit" link. By clicking on this link, you will be directed to the "translation" page.<br />
 You must add session_start function in your application to use this functionnality !
 
 A normal page (translation disabled)
 
-![FINE translation disabled](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/translationDisabled.jpg)
+![FINE translation disabled](images/translationDisabled.jpg)
 A page with translation enabled
 
-![FINE translation enabled](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/translationEnabled.jpg)
+![FINE translation enabled](images/translationEnabled.jpg)
 
 Where are messages stored
 -------------------------
@@ -120,4 +120,4 @@ Advanced features: translation
 ------------------------------
 
 With the FinePHPArrayTranslationService class, you can translate each component separately. You should see 2 new menus in the right. They work like the same link to the left
-![FINE translate instance](https://raw.github.com/thecodingmachine/utils.i18n.fine/3.0/doc/images/mouf_translate.png)
+![FINE translate instance](images/mouf_translate.png)

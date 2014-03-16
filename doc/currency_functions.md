@@ -21,13 +21,10 @@ echo fine_get_currency_symbol("USD");
 
 ###function fine_get_price($price, $currency_iso_code)
 
-Return the currency symbol based on the currency ISO 4217 code.
+Return the price based on the currency ISO 4217 code.
 
 Example:
 ```
-// This will display €
-echo fine_get_currency_symbol("EUR");
-
-// This will display $
-echo fine_get_currency_symbol("USD");	
+// This will display 12 € or €12, depending on the locale
+echo fine_get_price(12, "EUR");
 ```
