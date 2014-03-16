@@ -42,6 +42,12 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	private $msg = null;
 	
 	/**
+	 * Store the file load to optimize performance and call only one time each translation files.
+	 * @var string[]
+	 */
+	private $loadFile = array();
+	
+	/**
 	 * The path to the directory storing the translations.
 	 * <p>The directory path should end with a "/".</p>
 	 * <p>Each file in this directory is a PHP file containing an array variable named $msg. The key is the code or message id, the value is translation.<br/>
@@ -98,7 +104,7 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 		$instanceName = MoufManager::getMoufManager()->findInstanceName($this);
 			
 		if (!file_exists(ROOT_PATH.$this->i18nMessagePath."message.php")) {
-			return new MoufValidatorResult(MoufValidatorResult::ERROR, "<b>Fine: </b>Unable to find default translation file for instances: ".ROOT_PATH.$this->i18nMessagePath."message.php.<br/>"
+			return new MoufValidatorResult(MoufValidatorResult::ERROR, "<b>Fine: </b>Unable to find default translation file for instance: <code>".ROOT_PATH.$this->i18nMessagePath."message.php</code>.<br/>"
 															."You should create the following files:<br/>"
 															.$this->i18nMessagePath."message.php <a href='".ROOT_URL."vendor/mouf/mouf/editLabels/createMessageFile?name=".$instanceName."&selfedit=false&language=default'>(create this file)</a>");
 		}
@@ -108,18 +114,14 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 			// The array of messages by message, then by language:
 			// array(message_key => array(language => message))
 			$keys = $this->getAllKeys();
-			if($instanceName == 'defaultTranslationService')
-			error_log(var_export($keys, true));
 			foreach ($keys as $key) {
 				$msgs = $this->getMessageForAllLanguages($key);
-				if($instanceName == 'defaultTranslationService')
-			error_log(var_export($msgs, true));
 				if (!isset($msgs['default'])) {
 					$missingDefaultKeys[$instanceName][] = $key;
 				}
 			}
 			if (empty($missingDefaultKeys)) {
-				return new MoufValidatorResult(MoufValidatorResult::SUCCESS, "<b>Fine: </b>Default translation file found in all implementations of FinePHPArrayTranslationService.<br />
+				return new MoufValidatorResult(MoufValidatorResult::SUCCESS, "<b>Fine: </b>Default translation file found in instance <code>$instanceName</code>.<br />
 																				Default translation is available for all messages.");
 			} else {
 				$html = "";
@@ -147,18 +149,21 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 		if($this->language === null) {
 			$this->initLanguage();
 		}
-		if($this->msg_edition_mode === null)
+		if($this->msg_edition_mode === null) {
 			$this->msg_edition_mode = isset($_SESSION["FINE_MESSAGE_EDITION_MODE"])?$_SESSION["FINE_MESSAGE_EDITION_MODE"]:false;
+		}
 
 		$args = func_get_args();
 	
 		//Load the main file
-		if($this->msg === null)
+		if($this->msg === null) {
 			$this->retrieveMessages($this->language);
+		}
 			
 		//If the translation is not in the main file, load the custom file associated to the message
-		if(!isset($this->msg[$message]))
+		if(!isset($this->msg[$message])) {
 			$this->retrieveCustomMessages($message, $this->language);
+		}
 			
 		if (isset($this->msg[$message])) {
 			$value = $this->msg[$message];
@@ -198,11 +203,13 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 
 		$args = func_get_args();
 	
-		if($this->msg === null)
+		if($this->msg === null) {
 			$this->retrieveMessages($this->language);
+		}
 			
-		if(!isset($this->msg[$message]))
+		if(!isset($this->msg[$message])) {
 			$this->retrieveCustomMessages($message, $this->language);
+		}
 
 		if (isset($this->msg[$message])) {
 			$value = $this->msg[$message];
@@ -274,10 +281,16 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	 */
 	private function retrieveMessages($language = null) {
 		$msg = array();
-		@include_once ROOT_PATH.$this->i18nMessagePath.'message.php';
+		$file = ROOT_PATH.$this->i18nMessagePath.'message.php';
+		if(!isset($this->loadFile[$file]) && file_exists($file)) {
+			@include $file;
+			$this->loadFile[$file] = true;
+		}
 		if($language) {
-			if (file_exists(ROOT_PATH.$this->i18nMessagePath.'message_'.$language.'.php')){
-				require_once ROOT_PATH.$this->i18nMessagePath.'message_'.$language.'.php';
+			$file = ROOT_PATH.$this->i18nMessagePath.'message_'.$language.'.php';
+			if (!isset($this->loadFile[$file]) && file_exists($file)){
+				require $file;
+				$this->loadFile[$file] = true;
 			}
 		}
 		$this->msg = $msg;
@@ -297,15 +310,57 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 		$strs = preg_split('/[\.\-\_]/', $key);
 		$str = strtolower($strs[0]);
 		if($str && $str != $key && preg_match('/[a-z0-9\.\-\_]*/', $str)) {
-			if (file_exists(ROOT_PATH.$this->i18nMessagePath.'message_custom_default_'.$str.'.php'))
-				require_once ROOT_PATH.$this->i18nMessagePath.'message_custom_default_'.$str.'.php';
-			if (file_exists(ROOT_PATH.$this->i18nMessagePath.'message_custom_'.$language.'_'.$str.'.php'))
-				require_once ROOT_PATH.$this->i18nMessagePath.'message_custom_'.$language.'_'.$str.'.php';
+			$file = ROOT_PATH.$this->i18nMessagePath.'message_custom_default_'.$str.'.php';
+			if (!isset($this->loadFile[$file]) && file_exists($file)) {
+				require $file;
+				$this->loadFile[$file] = true;
+			}
+
+			$file = ROOT_PATH.$this->i18nMessagePath.'message_custom_'.$language.'_'.$str.'.php';
+			if (!isset($this->loadFile[$file]) && file_exists($file)) {
+				require $file;
+				$this->loadFile[$file] = true;
+			}
 			if(isset($msg))
 				$this->msg = array_merge($msg, $this->msg);
 		}
 	}
 	
+	/**
+	 * Use this function to force the language.
+	 * Don't forget to call this function with null to restore default parameters. 
+	 * Return true if the language change, else the language is the same,
+	 * this function return false
+	 * 
+	 * @param string $language
+	 * @return bool
+	 */
+	public function forceLanguage($language) {
+		$changeLanguage = false;
+		// Check if the user set null to retrieve the initial language
+		// If the initial language is already recovered fine don't require the file
+		if($language === null) {
+			// Save old language
+			$language = $this->language;
+			// Retrieve initial language
+			$this->initLanguage();
+			// Chekck if the language change
+			if($this->language != $language) {
+				$changeLanguage = true;
+			}
+		}
+		// If the user ask a new language not set
+		elseif($this->language != $language) {
+			$this->language = $language;
+			$changeLanguage = true;
+		}
+		
+		// Empty all the old language
+		if($changeLanguage) {
+			$this->loadFile = array();
+			$this->msg = null;
+		}
+	}
 	
 	/***************************/
 	/****** Edition mode *******/
@@ -391,12 +446,41 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	}
 
 	/**
+	 * Loads and returns all the messages with languages, in a big array.
+	 */
+	public function getAllMessages($language = null) {
+	
+		$this->loadAllMessages();
+
+		// The array of messages by message, then by language:
+		// array(message_key => array(language => message))
+		$msgs = array();
+	
+		$keys = $this->getAllKeys();
+	
+		$languages = $this->getSupportedLanguages();
+	
+		foreach ($keys as $key) {
+			$msgs[$key] = $this->getMessageForAllLanguages($key, $language);
+		}
+	
+		ksort($msgs);
+		$response = array("languages"=>$languages, "msgs"=>$msgs);
+		return $response;
+	}
+	
+	/**
 	 * Get the message for language.
 	 * 
 	 * @param string $key
 	 * @return array<string, string>
 	 */
 	public function getMessageForAllLanguages($key, $lang = null) {
+		
+		if (!$this->messages) {
+			$this->loadAllMessages();
+		}
+		
 		$messageArray = array();
 		foreach ($this->messages as $language=>$messageLanguage) {
 			if(is_null($lang) || $lang == "")
@@ -431,6 +515,7 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 	
 	/**
 	 * Creates the file for specified language.
+	 * If the file already exists, the function does nothing.
 	 *
 	 * @param string $language
 	 */
@@ -461,7 +546,47 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 			}
 		}
 		
-		$fp = fopen($file, "w");
-		fclose($fp);
+		if (!file_exists($file)) {
+			$fp = fopen($file, "w");
+			fclose($fp);
+			chmod($file, 0664);
+		}
+	}
+	
+	/**
+	 * Sets and saves a new message translation.
+	 * 
+	 * @param string $key
+	 * @param string $value
+	 * @param string $language
+	 */
+	public function setMessage($key, $value, $language) {
+		$messageFile = $this->getMessageLanguageForLanguage($language);
+		$messageFile->setMessage($key, $value);
+		$messageFile->save();
+	}
+	
+	/**
+	 * Sets and saves many messages at once for a given language.
+	 *
+	 * @param array $messages
+	 * @param string $language
+	 */
+	public function setMessages(array $messages, $language) {
+		$messageFile = $this->getMessageLanguageForLanguage($language);
+		$messageFile->setMessages($messages);
+		$messageFile->save();
+	}
+	
+	/**
+	 * Deletes a message translation.
+	 *
+	 * @param string $key
+	 * @param string $language
+	 */
+	public function deleteMessage($key, $language) {
+		$messageFile = $this->getMessageLanguageForLanguage($language);
+		$messageFile->deleteMessage($key);
+		$messageFile->save();
 	}
 }

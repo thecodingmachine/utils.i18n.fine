@@ -1,6 +1,6 @@
 <?php 
 
-namespace Mouf\Utils\i18n\Fine\Validators;
+namespace Mouf\Utils\I18n\Fine\Validators;
 
 use Mouf\MoufManager;
 
