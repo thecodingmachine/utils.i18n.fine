@@ -18,21 +18,15 @@ namespace Mouf\Utils\I18n\Fine\Language;
 class SessionLanguageDetection implements LanguageDetectionInterface {
 	
 	/**
-	 * The language that will be returned.
-	 * 
-	 * @Property
-	 * @Compulsory
-	 * @var string
-	 */
-	public $language = "default";
-	
-	/**
 	 * Returns the language to use.
 	 * 
 	 * @see plugins/utils/i18n/fine/2.1/language/LanguageDetectionInterface::getLanguage()
 	 * @return string
 	 */
 	public function getLanguage() {
+		if (!isset($_SESSION['_fine_I18n_language'])){
+			$this->setLanguage('default');
+		}
 		return $_SESSION['_fine_I18n_language'];
 	}
 	
