@@ -168,7 +168,7 @@ class FinePHPArrayTranslationService implements LanguageTranslationInterface, Mo
 		} else {
 			$value = "???".$message;
 			for ($i=1,$count=count($args);$i<$count;$i++){
-				$value .= ", ".plainstring_to_htmlprotected($args[$i]);
+				$value .= ", ".$args[$i];
 			}
 			$value .= "???";
 		}
