@@ -21,6 +21,7 @@ class Translator implements ValueInterface {
 	 * 
 	 * @param LanguageTranslationInterface $languageTranslationInterface
 	 * @param string $key
+     * @Important
 	 */
 	public function __construct(LanguageTranslationInterface $languageTranslationInterface, $key) {
 		$this->languageTranslationInterface = $languageTranslationInterface;
