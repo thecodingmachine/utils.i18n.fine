@@ -32,14 +32,14 @@ class FineMessageLanguage {
 	 * @var $folder The path to the folder to be loaded
 	 */
 	public function loadAllFile($folder, $language = "default") {
-		$this->folder = $folder;
-		$this->language = $language;
+        $this->folder = $folder;
+        $this->language = $language;
 		
-		$msg = array();
-		if($language == "default")
-			@include($folder."message.php");
-		else
-			@include($folder."message_".$language.".php");
+        $msg = array();
+        if($language == "default")
+            @include($folder."message.php");
+        else
+        @include($folder."message_".$language.".php");
 
         /*
          * Some OSes don't distinguish between empty array and FALSE (they may return FALSE in case of no match),
@@ -52,7 +52,7 @@ class FineMessageLanguage {
             }
         }
 
-		$this->msg = $msg;
+        $this->msg = $msg;
 	}
 
 	/**
