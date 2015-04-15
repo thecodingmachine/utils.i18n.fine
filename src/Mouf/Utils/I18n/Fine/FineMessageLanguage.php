@@ -60,6 +60,7 @@ class FineMessageLanguage {
 	 * @var $folder The path to the folder to be loaded
 	 */
 	public function loadOneFile($file, $language = "default") {
+        //$folder is not set ... even remove this line should or initiate $folder
 		$this->folder = $folder;
 		
 		$msg = array();
