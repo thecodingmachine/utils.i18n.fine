@@ -31,7 +31,7 @@ class FineMessageLanguage {
 	 * Loads all translation files
 	 * @var $folder The path to the folder to be loaded
 	 */
-	public function loadAllFile($folder, $language = "default") {
+    public function loadAllFile($folder, $language = "default") {
         $this->folder = $folder;
         $this->language = $language;
 		
@@ -53,7 +53,7 @@ class FineMessageLanguage {
         }
 
         $this->msg = $msg;
-	}
+    }
 
 	/**
 	 * Loads all translation files
