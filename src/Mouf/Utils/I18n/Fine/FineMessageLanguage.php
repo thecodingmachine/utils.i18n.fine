@@ -47,7 +47,7 @@ class FineMessageLanguage {
          */
         $ressourceFiles = glob($folder."message_custom_".$language."_*.php");
         if ($ressourceFiles){
-            foreach (glob($folder."message_custom_".$language."_*.php") as $filename) {
+            foreach ($ressourceFiles as $filename) {
                 @include($filename);
             }
         }
