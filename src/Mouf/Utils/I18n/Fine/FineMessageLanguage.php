@@ -40,10 +40,17 @@ class FineMessageLanguage {
 			@include($folder."message.php");
 		else
 			@include($folder."message_".$language.".php");
-			
-		foreach (glob($folder."message_custom_".$language."_*.php") as $filename) {
-			@include($filename);
-		}
+
+        /*
+         * Some OSes don't distinguish between empty array and FALSE (they may return FALSE in case of no match),
+         * therefore the foreach may trigger a Warning even if there is no error
+         */
+        $ressourceFiles = glob($folder."message_custom_".$language."_*.php");
+        if ($ressourceFiles){
+            foreach (glob($folder."message_custom_".$language."_*.php") as $filename) {
+                @include($filename);
+            }
+        }
 
 		$this->msg = $msg;
 	}
