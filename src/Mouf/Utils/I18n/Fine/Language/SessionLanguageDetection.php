@@ -24,6 +24,9 @@ class SessionLanguageDetection implements LanguageDetectionInterface {
 	 * @return string
 	 */
 	public function getLanguage() {
+        if (!session_id()){
+            session_start();
+        }
 		if (!isset($_SESSION['_fine_I18n_language'])){
 			$this->setLanguage('default');
 		}
